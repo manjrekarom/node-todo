@@ -3,6 +3,17 @@ const bodyParser = require('body-parser');
 const {ObjectID} = require('mongodb');
 
 let {mongoose} = require('./db/mongoose.js');  
+
+const port = process.env.PORT || 3000;
+
+if(process.env.PORT){
+    mongoose.connect('mongodb://manjrekarom:MOjocool29@ds113505.mlab.com:13505/notes-todo');
+}
+else{
+    mongoose.connect('mongodb://localhost:27017/TodoApp');
+    
+}
+
 let {Todo} = require('./models/todo.js');
 let {User} = require('./models/user.js');
 
@@ -53,8 +64,9 @@ app.get('/todos/:id', (req, res)=>{
    // console.log(req.body);
 });
 
-app.listen(3000, ()=> {
-    console.log('Server on port',3000);
+
+app.listen(port, ()=> {
+    console.log(`Listening on port ${port}`);
 });
 
 module.exports = {
