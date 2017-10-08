@@ -10,8 +10,7 @@ if(process.env.PORT){
     mongoose.connect('mongodb://manjrekarom:MOjocool29@ds113505.mlab.com:13505/notes-todo');
 }
 else{
-    mongoose.connect('mongodb://localhost:27017/TodoApp');
-    
+    mongoose.connect('mongodb://localhost:27017/TodoApp');    
 }
 
 let {Todo} = require('./models/todo.js');
@@ -31,7 +30,6 @@ app.post('/todos', (req, res)=>{
     },(e)=>{
         res.status(400).send(e);
     });
-
     // console.log(req.body);
 });
 
@@ -64,6 +62,25 @@ app.get('/todos/:id', (req, res)=>{
    // console.log(req.body);
 });
 
+app.delete('/todos/:id', (req, res)=>{
+    let id = req.params.id;
+    // console.log(id);
+    if(!ObjectID.isValid(id)) {
+        // console.log('Error');
+        return res.status(404).send();
+    }
+    else {
+        Todo.findByIdAndRemove(id).then((todo) => {
+            if(!todo){
+                return res.status(404).send();
+            }
+            res.send({todo});
+        }).catch((e) => {
+            return res.status(400).send();
+        });
+    }
+   // console.log(req.body);
+});
 
 app.listen(port, ()=> {
     console.log(`Listening on port ${port}`);
